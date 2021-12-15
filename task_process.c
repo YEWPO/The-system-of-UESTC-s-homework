@@ -12,6 +12,14 @@
 
 #define process_file "processfile.txt"
 
+void read_file();
+int search_pps_num(int);
+void push_file();
+void push_process();
+void save_file();
+void welcome_stu();
+void welcome_tec();
+
 typedef struct{
     int group_id;
     double process;
@@ -33,7 +41,7 @@ void read_file(){
     return;
 }
 
-int serch_pps_num(int group_id){
+int search_pps_num(int group_id){
     for(rg int i=1;i<=pps_cnt;++i)
         if(pps[i].group_id==group_id)
             return i;
@@ -101,7 +109,7 @@ void push_process(){
     printf("你的小组编号是:");
     int group_num;
     scanf("%d",&group_num);
-    int pps_num=serch_pps_num(group_num);
+    int pps_num=search_pps_num(group_num);
     double process;
     while(true){
         printf("你的小组完成进度是（请输入0~1之间的小数）:");
@@ -151,10 +159,10 @@ void welcome_stu(){
                 break;
             case '2': push_file();
                 break;
-            case '0': return;
+            case '0': free(fuct);
+            return;
         }
     }
-    free(fuct);
     return;
 }
 
@@ -186,9 +194,9 @@ void quick_sort_process(int l,int r){
     int i=l,j=r;
     double mid=pps[(l+r)>>1].process;
     do{
-        while(pps[i].process<mid)
+        while(pps[i].process>mid)
             i++;
-        while(pps[j].process>mid)
+        while(pps[j].process<mid)
             j--;
         if(i<=j)
         {
