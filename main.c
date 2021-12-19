@@ -2,133 +2,99 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define process_file "prcfile.txt"
-#define user_file "usr.txt"
-#define tc_stu_file "tsfile.txt"
-#define stu_stu_file "ssfile.txt"
+void teacher_client();
+void student_client();
 
-typedef struct{
-    int member_id;
-    char *member_name;
-}Member;
-
-typedef struct{
-    int group_id;
-    Member *head;
-    int total;
-}Group;
-
-typedef struct{
-    int question_id;
-    char *question;
-    char *ans;
-}TSqus;
-
-typedef struct{
-    double process;
-    FILE *file;
-}Program;
-
-void clearscreen(){
-    system("cls");
-    return;
-}
+#include "log_register.h"
+#include "task_process.h"
+#include "interactts.h"
 
 void teacher_client(){
-    //password function written by wujun;
-    clearscreen();
-    do{
-        printf("\n++++++++++++++++++++++++\n");
-        printf("1-查看学生项目完成进度\n");
-        printf("2-管理学生信息\n");
-        printf("3-学生提问\n");
-        printf("0-退出系统\n");
-        printf("++++++++++++++++++++++++\n\n");
-        char *funcnum;
-        funcnum=(char *)malloc(100*sizeof(char));
-        printf("请输入功能序号 > ");
-        do{
-            scanf("%s",funcnum);
-            if(funcnum[0]>='0'&&funcnum[0]<='3')
-                break; 
-            printf("请正确输入功能类型！\n");
-            printf("请输入功能序号 > ");
-        }while(true);
-        switch(funcnum[0]){
-            case '1': ;//function written by hexuanyu;
+    int fuct;
+    while(true){
+        while(true){
+            system("cls");
+            printf("++++++++++++++++++++++++++++++++++++++++++++++++\n");
+            printf("1-Display the students' process\n");
+            printf("2-Manage the students' information\n");
+            printf("3-Students' questions\n");
+            printf("0-exit\n");
+            printf("++++++++++++++++++++++++++++++++++++++++++++++++\n");
+
+            printf("\nChoose your number that you want to do:");
+            if(!scanf("%d",&fuct)){
+                printf("Please put in a correct number:\n");
+                char s[10000];
+                gets(s);
+                system("pause");
+                continue;
+            }
+            if(fuct>=0&&fuct<=3){
+                char ch;
+                ch=getchar();
+                while(ch!='\n')
+                    ch=getchar();
                 break;
-            case '2': ;//function written by ganlinjun;
-                break;
-            case '3': ;//function written by yeqirui;
-                break;
-            case '0':return;
+            }   
+            printf("Please put int a correct number:\n");
+            system("pause");
         }
-    }while(true);
+        switch(fuct){
+            case 1: welcome_tec_task();
+                break;
+            case 2: welcome_tecmanager();
+                break;
+            case 3: welcome_tec_tsact();
+                break;
+            case 0: exit(EXIT_SUCCESS);
+        }
+    }
     return;
 }
 
 void student_client(){
-    //student password function written by wujun;
-    clearscreen();
-    typedef struct{
-        int question_id;
-        char *question;
-        char *ans;
-    }SSqus;
+    int fuct;
+    while(true){
+        while(true){
+            system("cls");
+            printf("++++++++++++++++++++++++++++++++++++++++++\n");
+            printf("1-Submit your process or files\n");
+            printf("2-Ask teacher questions\n");
+            printf("0-exit\n");
+            printf("++++++++++++++++++++++++++++++++++++++++++\n");
 
-    do{
-        printf("\n+++++++++++++++++++\n");
-        printf("1-上传文件和进度\n");
-        printf("2-组内提问&回答\n");
-        printf("3-向老师提问\n");
-        printf("0-退出系统\n");
-        printf("+++++++++++++++++++\n\n");
-        char *funcnum;
-        funcnum=(char *)malloc(100*sizeof(char));
-        printf("请输入功能序号 > ");
-        do{
-            scanf("%s",funcnum);
-            if(funcnum[0]>='0'&&funcnum[0]<='3')
+            printf("\nChoose your number that you want to do:");
+            if(!scanf("%d",&fuct)){
+                printf("Please put in a correct number:\n");
+                char s[10000];
+                gets(s);
+                system("pause");
+                continue;
+            }
+            if(fuct>=0&&fuct<=2){
+                char ch;
+                ch=getchar();
+                while(ch!='\n')
+                    ch=getchar();
                 break;
-            printf("请正确输入功能类型！\n");
-            printf("请输入功能序号 > ");
-        }while(true);
-        switch(funcnum[0]){
-            case '1': ;//function written by wushuting;
-                break;
-            case '2': ;//function written by wangzirui;
-                break;
-            case '3': ;//function written by huangxin;
-                break;
-            case '0':return;
+            }   
+            printf("Please put int a correct number:\n");
+            system("pause");
         }
-    }while(true);
-    return;
-}
-
-void who_is(){
-    char *whousr;
-    whousr=(char *)malloc(100*sizeof(char));
-    printf("选择用户类型（ 1 - 教师 2 - 学生 0 - 退出 ）> ");
-    do{
-        scanf("%s",whousr);
-        if(whousr[0]>='0'&&whousr[0]<='2')
-            break;
-        printf("请正确输入用户类型！\n");
-        printf("\n选择用户类型（ 1 - 教师 2 - 学生 0 - 退出 ）> ");
-    }while(true);
-    switch(whousr[0]){
-        case '1':teacher_client();
-            break;
-        case '2':student_client();
-            break;
-        case '0':return;
+        switch(fuct){
+            case 1: welcome_stu_task();
+                break;
+            case 2: welcome_stu_tsact();
+                break;
+            case 0: exit(EXIT_SUCCESS);
+        }
     }
     return;
 }
 
 int main(){
-    who_is();
+    system("color B5");
+    Mainland();
     system("pause");
     return 0;
 }

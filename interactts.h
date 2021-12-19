@@ -11,7 +11,8 @@
 
 void read_file();
 void print_list();
-void welcome_stu();
+void welcome_stu_tsact();
+void welcome_tec_tsact();
 void add_to_list();
 void submit_Q();
 void destroy_list();
@@ -34,8 +35,9 @@ List *head;
 void read_file(){
     FILE *fp;
     if(!(fp=fopen(TS_FILE,"r"))){
-        printf("读取问题和回答失败!\n");
-        return;
+        printf("Failed to read the file! The system will create a new one!\n");
+        fp=fopen(TS_FILE,"w+");
+        system("pause");
     }
     head=(List*)malloc(sizeof(List));
     List *now_pointer,*temp;
@@ -61,7 +63,7 @@ void read_file(){
 void add_to_list(Q data){
     FILE *fp;
     if(!(fp=fopen(TS_FILE,"a"))){
-        printf("提交问题失败!\n");
+        printf("Failed to submit question!\n");
         return;
     }
 
@@ -71,7 +73,7 @@ void add_to_list(Q data){
         pre=now_pointer,now_pointer=now_pointer->nxt;
     now_pointer=(List*)malloc(sizeof(List));
     if(!now_pointer){
-        printf("提交问题失败!\n");
+        printf("Failed to submit question!\n");
         return;
     }
     data.id=++questioncnt;
@@ -89,11 +91,11 @@ void add_to_list(Q data){
 void submit_Q(){
     system("cls");
     Q temp;
-    printf("请输入你的问题:");
+    printf("Please put your question:");
     scanf("%s",temp.question);
     strcpy(temp.answer,"NULL");
     add_to_list(temp);
-    printf("提交问题成功!\n");
+    printf("Submit question successfully!\n");
     system("pause");
     return;
 }
@@ -127,38 +129,48 @@ void destroy_list(){
     return;
 }
 
-void welcome_stu(){
+void welcome_stu_tsact(){
     read_file();
-    char *fuct;
-    fuct=(char*)malloc(50*sizeof(char));
+    int fuct;
     while(true){
         while(true){
             system("cls");
-            printf("++++++++++++++++++++++++\n");
-            printf("1-查看所有问题及回答\n");
-            printf("2-提出问题\n");
-            printf("0-返回上级菜单\n");
-            printf("++++++++++++++++++++++++\n");
+            printf("**********************************************\n");
+            printf("1-Show the questions and answers\n");
+            printf("2-Show your question to the teacher\n");
+            printf("0-Back to the last menu\n");
+            printf("**********************************************\n");
 
-            printf("\n选择你所需的功能编号:");
-            scanf("%s",fuct);
-            if(fuct[0]>='0'&&fuct[0]<='2')
+            printf("\nChoose your function number:");
+            if(!scanf("%d",&fuct)){
+                printf("Please put in a interger number correctly!\n");
+                char s[10000];
+                gets(s);
+                system("pause");
+                continue;
+            }
+            if(fuct>=0&&fuct<=2){
+                char ch;
+                ch=getchar();
+                while(ch!='\n')
+                    ch=getchar();
                 break;
-            printf("请正确输入类型数字:\n");
+            }
+            printf("Please put in a interger number correctly!\n");
+            system("pause");
         }
-        switch(fuct[0]){
-            case '1': print_list();
+        switch(fuct){
+            case 1: print_list();
                 break;
-            case '2': submit_Q();
+            case 2: submit_Q();
                 break;
-            case '0': destroy_list(),free(fuct);
+            case 0: destroy_list();
             return;
         }
     }
     return;
 }
 
-void welcome_tec();
 void answer_question();
 void give_answer();
 bool save_file();
@@ -166,7 +178,7 @@ bool save_file();
 bool save_file(){
     FILE *fp;
     if(!(fp=fopen(TS_FILE,"w"))){
-        printf("成功修改但未写入文件!\n");
+        printf("Successfully update but not put in a file!\n");
         return false;
     }
     List *now_pointer=head->nxt;
@@ -193,12 +205,12 @@ void give_answer(int id,const char *ans){
         now_pointer=now_pointer->nxt;
     }
     if(!now_pointer){
-        printf("问题编号错误，请重新输入!\n");
+        printf("Wrong question id\n");
         return;
     }
     strcpy(now_pointer->data.answer,ans);
     if(save_file())
-    printf("成功上传回答!\n");
+    printf("Submit successfully!\n");
     return;
 }
 
@@ -206,49 +218,64 @@ void answer_question(){
     system("cls");
     print_list();
     putchar('\n');
-    printf("请输入问题编号:");
+    printf("Please put in the id of the question that you want to answer:");
     int id;
-    scanf("%d",&id);
+    while(!scanf("%d",&id)){
+        printf("Wrong id number!\n");
+        char s[10000];
+        gets(s);
+        system("pause");
+    }
+    char ch;
+    ch=getchar();
+    while(ch!='\n')
+        ch=getchar();
     char ans[1000];
-    printf("你的回答是:");
+    printf("Your answer is:");
     scanf("%s",ans);
     give_answer(id,ans);
     system("pause");
     return;
 }
 
-void welcome_tec(){  
+void welcome_tec_tsact(){  
     read_file();
-    char *fuct;
-    fuct=(char*)malloc(50*sizeof(char));
+    int fuct;
     while(true){
         while(true){
             system("cls");
             print_list();
-            printf("++++++++++++++++++++++++\n");
-            printf("1-选择问题回答\n");
-            printf("0-返回上级菜单\n");
-            printf("++++++++++++++++++++++++\n");
+            printf("********************************************\n");
+            printf("1-Choose a question to anwser\n");
+            printf("0-Back to last menu\n");
+            printf("********************************************\n");
 
-            printf("\n选择你所需的功能编号:");
-            scanf("%s",fuct);
-            if(fuct[0]>='0'&&fuct[0]<='1')
+            printf("\nChoose the function number:");
+            if(!scanf("%d",&fuct)){
+                printf("Correcrt number needed!\n");
+                char s[10000];
+                gets(s);
+                system("pause");
+                continue;
+            }
+            if(fuct>=0&&fuct<=1){
+                char ch;
+                ch=getchar();
+                while(ch!='\n')
+                    ch=getchar();
                 break;
-            printf("请正确输入类型数字:\n");
+            }
+            printf("Correct number needed!\n");
+            system("pause");
         }
-        switch(fuct[0]){
-            case '1': answer_question();
+        switch(fuct){
+            case 1: answer_question();
                 break;
-            case '0': destroy_list(),free(fuct);
+            case 0: destroy_list();
             return;
         }
     }
     return;
-}
-
-int main(){
-    welcome_tec();
-    return 0;
 }
 
 #endif
