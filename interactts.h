@@ -35,7 +35,7 @@ List *head;
 void read_file(){
     FILE *fp;
     if(!(fp=fopen(TS_FILE,"r"))){
-        printf("Failed to read the file! The system will create a new one!\n");
+        printf("拉取问题失败，将新建问题文件!\n");
         fp=fopen(TS_FILE,"w+");
         system("pause");
     }
@@ -63,7 +63,7 @@ void read_file(){
 void add_to_list(Q data){
     FILE *fp;
     if(!(fp=fopen(TS_FILE,"a"))){
-        printf("Failed to submit question!\n");
+        printf("提交失败!\n");
         return;
     }
 
@@ -73,7 +73,7 @@ void add_to_list(Q data){
         pre=now_pointer,now_pointer=now_pointer->nxt;
     now_pointer=(List*)malloc(sizeof(List));
     if(!now_pointer){
-        printf("Failed to submit question!\n");
+        printf("提交失败!\n");
         return;
     }
     data.id=++questioncnt;
@@ -91,11 +91,11 @@ void add_to_list(Q data){
 void submit_Q(){
     system("cls");
     Q temp;
-    printf("Please put your question:");
+    printf("你的问题是:");
     scanf("%s",temp.question);
     strcpy(temp.answer,"NULL");
     add_to_list(temp);
-    printf("Submit question successfully!\n");
+    printf("提交成功!\n");
     system("pause");
     return;
 }
@@ -103,7 +103,7 @@ void submit_Q(){
 void print_list(){
     system("cls");
     printf("----------------------------------------\n");
-    printf("id\tquestion\tanswer\n");
+    printf("编号\t问题\t答案\n");
     List *now_pointer=head->nxt;
     while(now_pointer){
         Q temp=now_pointer->data;
@@ -136,14 +136,14 @@ void welcome_stu_tsact(){
         while(true){
             system("cls");
             printf("**********************************************\n");
-            printf("1-Show the questions and answers\n");
-            printf("2-Show your question to the teacher\n");
-            printf("0-Back to the last menu\n");
+            printf("1-列出问题列表\n");
+            printf("2-向老师询问问题\n");
+            printf("0-返回上级菜单\n");
             printf("**********************************************\n");
 
-            printf("\nChoose your function number:");
+            printf("\n请输入功能编号:");
             if(!scanf("%d",&fuct)){
-                printf("Please put in a interger number correctly!\n");
+                printf("请正确输入一个功能编号!\n");
                 char s[10000];
                 gets(s);
                 system("pause");
@@ -156,7 +156,7 @@ void welcome_stu_tsact(){
                     ch=getchar();
                 break;
             }
-            printf("Please put in a interger number correctly!\n");
+            printf("请正确输入一个功能编号!\n");
             system("pause");
         }
         switch(fuct){
@@ -178,7 +178,7 @@ bool save_file();
 bool save_file(){
     FILE *fp;
     if(!(fp=fopen(TS_FILE,"w"))){
-        printf("Successfully update but not put in a file!\n");
+        printf("更新成功但未写入文件!\n");
         return false;
     }
     List *now_pointer=head->nxt;
@@ -205,12 +205,12 @@ void give_answer(int id,const char *ans){
         now_pointer=now_pointer->nxt;
     }
     if(!now_pointer){
-        printf("Wrong question id\n");
+        printf("错误的问题编号!\n");
         return;
     }
     strcpy(now_pointer->data.answer,ans);
     if(save_file())
-    printf("Submit successfully!\n");
+    printf("提交成功!\n");
     return;
 }
 
@@ -218,10 +218,10 @@ void answer_question(){
     system("cls");
     print_list();
     putchar('\n');
-    printf("Please put in the id of the question that you want to answer:");
+    printf("请输入将要回答的问题编号:");
     int id;
     while(!scanf("%d",&id)){
-        printf("Wrong id number!\n");
+        printf("请正确输入问题编号!\n");
         char s[10000];
         gets(s);
         system("pause");
@@ -231,14 +231,14 @@ void answer_question(){
     while(ch!='\n')
         ch=getchar();
     char ans[1000];
-    printf("Your answer is:");
+    printf("你的答案是:");
     scanf("%s",ans);
     give_answer(id,ans);
     system("pause");
     return;
 }
 
-void welcome_tec_tsact(){  
+void welcome_tec_tsact(){
     read_file();
     int fuct;
     while(true){
@@ -246,13 +246,13 @@ void welcome_tec_tsact(){
             system("cls");
             print_list();
             printf("********************************************\n");
-            printf("1-Choose a question to anwser\n");
-            printf("0-Back to last menu\n");
+            printf("1-选择一个问题回答\n");
+            printf("0-返回上级菜单\n");
             printf("********************************************\n");
 
-            printf("\nChoose the function number:");
+            printf("\n请输入功能编号:");
             if(!scanf("%d",&fuct)){
-                printf("Correcrt number needed!\n");
+                printf("请正确输入一个功能编号!\n");
                 char s[10000];
                 gets(s);
                 system("pause");
@@ -265,7 +265,7 @@ void welcome_tec_tsact(){
                     ch=getchar();
                 break;
             }
-            printf("Correct number needed!\n");
+            printf("请正确输入一个功能编号!\n");
             system("pause");
         }
         switch(fuct){

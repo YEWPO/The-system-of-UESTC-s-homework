@@ -5,6 +5,8 @@
 void teacher_client();
 void student_client();
 
+int group_num;
+
 #include "log_register.h"
 #include "task_process.h"
 #include "interactts.h"
@@ -15,15 +17,15 @@ void teacher_client(){
         while(true){
             system("cls");
             printf("++++++++++++++++++++++++++++++++++++++++++++++++\n");
-            printf("1-Display the students' process\n");
-            printf("2-Manage the students' information\n");
-            printf("3-Students' questions\n");
-            printf("0-exit\n");
+            printf("1-显示学生完成进度\n");
+            printf("2-管理学生信息\n");
+            printf("3-师生互动\n");
+            printf("0-退出\n");
             printf("++++++++++++++++++++++++++++++++++++++++++++++++\n");
 
-            printf("\nChoose your number that you want to do:");
+            printf("\n选择功能编号:");
             if(!scanf("%d",&fuct)){
-                printf("Please put in a correct number:\n");
+                printf("请正确输入一个编号:\n");
                 char s[10000];
                 gets(s);
                 system("pause");
@@ -35,8 +37,8 @@ void teacher_client(){
                 while(ch!='\n')
                     ch=getchar();
                 break;
-            }   
-            printf("Please put int a correct number:\n");
+            }
+            printf("请正确输入一个编号:\n");
             system("pause");
         }
         switch(fuct){
@@ -58,14 +60,14 @@ void student_client(){
         while(true){
             system("cls");
             printf("++++++++++++++++++++++++++++++++++++++++++\n");
-            printf("1-Submit your process or files\n");
-            printf("2-Ask teacher questions\n");
-            printf("0-exit\n");
+            printf("1-上传进度或文件\n");
+            printf("2-向老师提问\n");
+            printf("0-退出\n");
             printf("++++++++++++++++++++++++++++++++++++++++++\n");
 
-            printf("\nChoose your number that you want to do:");
+            printf("\n请输入功能编号:");
             if(!scanf("%d",&fuct)){
-                printf("Please put in a correct number:\n");
+                printf("请正确输入一个编号:\n");
                 char s[10000];
                 gets(s);
                 system("pause");
@@ -77,8 +79,8 @@ void student_client(){
                 while(ch!='\n')
                     ch=getchar();
                 break;
-            }   
-            printf("Please put int a correct number:\n");
+            }
+            printf("请正确输入一个编号:\n");
             system("pause");
         }
         switch(fuct){
@@ -93,7 +95,7 @@ void student_client(){
 }
 
 int main(){
-    system("color B5");
+    system("color 94");
     Mainland();
     system("pause");
     return 0;

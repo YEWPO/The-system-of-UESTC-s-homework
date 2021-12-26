@@ -31,38 +31,45 @@ program_process pps[MAXN];
 void tread_file(){
     FILE *fp;
     if(!(fp=fopen(process_file,"r"))){
-        printf("Can't get the process file, the system will create a new one!\n");
+        printf("文件读取失败，将创建一个新的文件!\n");
         fp=fopen(process_file,"w+");
         system("pause");
     }
     while(true){
-        fscanf(fp,"%d",&pps[++pps_cnt].group_id);
-        fscanf(fp,"%lf",&pps[pps_cnt].process);
+        int gid;
+        double gpr;
+        fscanf(fp,"%d",&gid);
+        fscanf(fp,"%lf",&gpr);
         if(feof(fp))
             break;
+        pps[++pps_cnt].group_id=gid;
+        pps[pps_cnt].process=gpr;
     }
     fclose(fp);
     return;
 }
 
-int search_pps_num(int group_id){
+int search_pps_num(int gid){
     for(rg int i=1;i<=pps_cnt;++i)
-        if(pps[i].group_id==group_id)
+        if(pps[i].group_id==gid)
             return i;
-    printf("Something error in your group id!\n");
-    return 0;
+    pps_cnt++;
+    pps[pps_cnt].group_id=gid;
+    pps[pps_cnt].process=0.0;
+    return pps_cnt;
 }
 
 void push_file(){
     system("cls");
-    printf("Your group program's name:");
+    printf("小组项目名称是:");
     char *program_name;
     program_name=(char*)malloc(1000*sizeof(char));
     scanf("%s",program_name);
     int T;
-    printf("Put the amount of files that you want to submit:");
+    printf("要提交的文件数量:");
     while(!scanf("%d",&T)){
-        printf("Please put in a correct number!\n");
+        printf("请正确输入一个数字!\n");
+        printf("要提交的文件数量:");
         char s[10000];
         gets(s);
         system("pause");
@@ -72,19 +79,19 @@ void push_file(){
         ch=getchar();
     int cnt=0;
     while(cnt<T){
-        printf("Please put in the address of the %dth file:",cnt+1);
+        printf("请输入第%d个文件的地址:",cnt+1);
         char *address;
         address=(char*)malloc(1000*sizeof(char));
         scanf("%s",address);
         char *file_name;
         file_name=(char*)malloc(1000*sizeof(char));
-        printf("Please put in your file's name:");
+        printf("请输入第%d个文件的名称:",cnt+1);
         scanf("%s",file_name);
         strcat(address,"\\");
         strcat(address,file_name);
         FILE *fp1;
         if(!(fp1=fopen(address,"r"))){
-            printf("Please put in correct address or file's name!\n");
+            printf("请正确输入文件的地址或名称!\n");
             continue;
         }
         char *write_file_name;
@@ -94,12 +101,14 @@ void push_file(){
         strcat(write_file_name,file_name);
         FILE *fp2;
         if(!(fp2=fopen(write_file_name,"w"))){
-            printf("Failed to submit your file! Please try again!(Ctrl+C to exit)\n");
+            printf("上传失败!请再试一次!(Ctrl+C 以强制退出)\n");
             continue;
         }
-        while(!feof(fp1)){
+        while(true){
             char s[1000];
             fgets(s,1000,fp1);
+            if(feof(fp1))
+                break;
             fputs(s,fp2);
         }
         cnt++;
@@ -110,40 +119,25 @@ void push_file(){
         free(write_file_name);
     }
     free(program_name);
-    printf("Submit successfully!\n");
+    printf("上传成功!\n");
     system("pause");
     return;
 }
 
 void push_process(){
     system("cls");
-    printf("Your group number is:");
-    int group_num,pps_num=0;
-    while(true){
-        while(!scanf("%d",&group_num)){
-            printf("Please put in a correct number!\n");
-            char s[10000];
-            gets(s);
-            system("pause");
-        }
-        char ch=getchar();
-        while(ch!='\n')
-            ch=getchar();
-        pps_num=search_pps_num(group_num);
-        if(pps_num)
-            break;
-    }
-    
+    int pps_num=search_pps_num(group_num);
+
     double process;
     while(true){
-        printf("Your group's process(a double number range from 0 - 1):");
+        printf("请输入一个0到1的小数表示完成度:");
         scanf("%lf",&process);
         if(0.0<=process&&process<=1.0)
             break;
-        printf("Please put your process correctly!\n");
+        printf("输入错误!\n");
     }
     pps[pps_num].process=process;
-    printf("Submit successfully!\n");
+    printf("提交成功!\n");
     system("pause");
     return;
 }
@@ -166,14 +160,14 @@ void welcome_stu_task(){
         while(true){
             system("cls");
             printf("---------------------------------\n");
-            printf("1-Submit your process\n");
-            printf("2-Submit your files\n");
-            printf("0-Back to the last menu\n");
+            printf("1-上传进度\n");
+            printf("2-上传文件\n");
+            printf("0-回到上级目录\n");
             printf("---------------------------------\n");
 
-            printf("\nChoose your number that you want to do:");
+            printf("\n请输入功能编号:");
             if(!scanf("%d",&fuct)){
-                printf("Please put in a correct number:\n");
+                printf("请正确输入一个功能编号:\n");
                 char s[10000];
                 gets(s);
                 system("pause");
@@ -185,8 +179,8 @@ void welcome_stu_task(){
                 while(ch!='\n')
                     ch=getchar();
                 break;
-            }   
-            printf("Please put int a correct number:\n");
+            }
+            printf("请正确输入一个功能编号:\n");
             system("pause");
         }
         switch(fuct){
@@ -249,16 +243,17 @@ void quick_sort_process(int l,int r){
 }
 
 void welcome_tec_task(){
+    pps_cnt=0;
     tread_file();
-    printf("Students' processes:\n");
+    printf("学生项目完成进度:\n");
     quick_sort_id(1,pps_cnt);
-    printf("++++++++++++++order by group's id+++++++++++++++++++++\n");
+    printf("++++++++++++++按组排序+++++++++++++++++++++\n");
     printf("group_id\tgroup_process\n");
     for(rg int i=1;i<=pps_cnt;++i){
         printf("%d\t\t",pps[i].group_id);
         printf("%.2lf\n",pps[i].process);
     }
-    printf("++++++++++++++order by processes++++++++++++++++++++\n");
+    printf("++++++++++++++按进度排序++++++++++++++++++++\n");
     quick_sort_process(1,pps_cnt);
     printf("group_id\tgroup_process\n");
     for(rg int i=1;i<=pps_cnt;++i){
@@ -266,7 +261,7 @@ void welcome_tec_task(){
         printf("%.2lf\n",pps[i].process);
     }
     printf("+++++++++++++++++++++++++++++++++++++++++++\n");
-    printf("The students's files have already in the exe address!\n");
+    printf("学生上传文件已显示在该程序所在文件夹中!\n");
     system("pause");
     return;
 }
